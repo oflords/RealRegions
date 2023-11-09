@@ -9,7 +9,10 @@ import java.util.UUID;
 
 public class Region {
 
+    public static List<Region> regions = new ArrayList<>();
+
     private String name;
+
     private UUID owner;
     private List<UUID> whitelist;
 
@@ -24,5 +27,17 @@ public class Region {
 
         this.whitelist = new ArrayList<>();
         this.whitelist.add(owner);
+    }
+
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<UUID> getWhitelist() {
+        return whitelist;
     }
 }
