@@ -64,6 +64,9 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                         }
                         new Region(name, player.getUniqueId(), regionPlayer.getPos1(), regionPlayer.getPos2());
                         player.sendMessage(ChatColor.GREEN + "Created new region " + name + "!");
+
+                        regionPlayer.setPos1(null);
+                        regionPlayer.setPos2(null);
                     }
                     case "whitelist" -> {
                         for (Region region : Region.regions) {

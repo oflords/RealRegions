@@ -11,6 +11,8 @@ public class RealRegions extends JavaPlugin {
         this.getCommand("region").setExecutor(new RegionCommand());
 
         getServer().getPluginManager().registerEvents(new RegionListener(), this);
+
+        // TODO: Load regions from SQL
     }
 
     public static RealRegions get() {

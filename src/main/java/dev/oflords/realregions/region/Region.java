@@ -40,4 +40,12 @@ public class Region {
     public List<UUID> getWhitelist() {
         return whitelist;
     }
+
+    public Location getPos1() {
+        return pos1;
+    }
+
+    public Location getPos2() {
+        return pos2;
+    }
 }
