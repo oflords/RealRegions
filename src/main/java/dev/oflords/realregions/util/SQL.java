@@ -3,12 +3,11 @@ package dev.oflords.realregions.util;
 import dev.oflords.realregions.RealRegions;
 import dev.oflords.realregions.region.Region;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 
 public class SQL {
@@ -88,7 +87,14 @@ public class SQL {
 
     public void save() {
         for (Region region : Region.regions) {
-            String save = "INSERT INTO regions (Name, Owner, Pos1, Pos2) VALUES ('" + region.getName() + "', '" + region.getOwner().toString() + "', '" + region.getPos1().toString() + "', '" + region.getPos2().toString() + "');";
+            String save;
+            if (region.getId() > 0) {
+                save = "INSERT INTO regions (Name, Owner, Pos1, Pos2) VALUES ('" + region.getName() + "', '" + region.getOwner().toString() + "', '" + region.getPos1().toString() + "', '" + region.getPos2().toString() + "');";
+            } else {
+                save = "UPDATE regions SET (Name = '" + region.getName() + "', Owner = '" + region.getOwner().toString() + "', Pos1 = '" + region.getPos1().toString() + "', Pos2 = '" + region.getPos2().toString() + "') WHERE ID = " + region.getId() + ";";
+            }
+
+            RealRegions.get().sql.getConnection().
 
             for (UUID uuid : region.getWhitelist()) {
                 String saveWhitelist = "INSERT INTO regions_whitelist (RegionID, User) VALUES (1, '" + uuid.toString() + "')";
@@ -97,12 +103,20 @@ public class SQL {
     }
 
     public void load() {
-        String SQL = "SELECT * FROM regions WHERE Active = 1";
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM regions WHERE Active = 1")) {
+            ResultSet data = statement.executeQuery();
 
-        // for each result
-        // new region
-        String whitelist = "SELECT * FROM regions_whitelist WHERE RegionID = 1 AND Active = 1";
-        // for each result
-        // region.getWhitelist().add(result);
+            if (data.next()) {
+                // new region
+
+                // for each result
+                // new region
+                String whitelist = "SELECT * FROM regions_whitelist WHERE RegionID = 1 AND Active = 1";
+                // for each result
+                // region.getWhitelist().add(result);
+            }
+        } catch (SQLException e) {
+
+        }
     }
 }

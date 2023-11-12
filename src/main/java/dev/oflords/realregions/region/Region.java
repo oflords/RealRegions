@@ -11,6 +11,8 @@ public class Region {
 
     public static List<Region> regions = new ArrayList<>();
 
+    private int id;
+
     private String name;
 
     private UUID owner;
@@ -69,5 +71,13 @@ public class Region {
 
     public void setPos2(Location pos2) {
         this.pos2 = pos2;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
