@@ -1,5 +1,6 @@
-package dev.oflords.realregions;
+package dev.oflords.realregions.region;
 
+import dev.oflords.realregions.RealRegions;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -11,6 +12,10 @@ public class RegionPlayer {
     public static HashMap<UUID, RegionPlayer> profiles = new HashMap<>();
 
     private UUID uuid;
+
+    private Region rename = null;
+
+    private Region redefine = null;
 
     private Location pos1;
     private Location pos2;
@@ -54,5 +59,21 @@ public class RegionPlayer {
 
     public void setPos2(Location pos2) {
         this.pos2 = pos2;
+    }
+
+    public Region getRename() {
+        return rename;
+    }
+
+    public Region getRedefine() {
+        return redefine;
+    }
+
+    public void setRename(Region rename) {
+        this.rename = rename;
+    }
+
+    public void setRedefine(Region redefine) {
+        this.redefine = redefine;
     }
 }

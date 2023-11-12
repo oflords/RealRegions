@@ -6,6 +6,10 @@ import org.bukkit.entity.Player;
 
 public class RegionUtil {
     public static boolean inRegionNotAllowed(Player player, Location location) {
+        if (player.hasPermission("region.bypass")) {
+            return true;
+        }
+
         for (Region region : Region.regions) {
             if (isLocationWithinBounds(location, region.getPos1(), region.getPos2())) {
                 return region.getOwner() != player.getUniqueId() && !region.getWhitelist().contains(player.getUniqueId());

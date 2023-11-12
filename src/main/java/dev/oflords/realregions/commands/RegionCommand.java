@@ -1,6 +1,8 @@
 package dev.oflords.realregions.commands;
 
-import dev.oflords.realregions.RegionPlayer;
+import dev.oflords.realregions.region.RegionPlayer;
+import dev.oflords.realregions.menus.ManageRegionMenu;
+import dev.oflords.realregions.menus.ViewRegionsMenu;
 import dev.oflords.realregions.region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,12 +27,12 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             if (args.length == 0) {
-                openMenu(player);
+                openMenu(player, "");
                 return true;
             } else if (args.length == 1) {
                 switch (args[0]) {
                     case "wand" -> {
-                        ItemStack wand = new ItemStack(Material.GOLDEN_SHOVEL);
+                        ItemStack wand = new ItemStack(Material.STICK);
                         ItemMeta wandMeta = wand.getItemMeta();
                         wandMeta.setDisplayName(ChatColor.YELLOW + "Region Wand");
                         wand.setItemMeta(wandMeta);
@@ -42,7 +44,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                     case "add" -> sender.sendMessage("Usage: /region add <name> <player>");
                     case "remove" -> sender.sendMessage("Usage: /region remove <name> <player>");
                     default -> {
-                        openMenu(player);
+                        openMenu(player, args[1]);
                         return true;
                     }
                 }
@@ -51,8 +53,13 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
 
                 switch (args[0]) {
                     case "create" -> {
+                        if (!player.hasPermission("region.create")) {
+                            player.sendMessage(ChatColor.RED + "You do not have permission to do this...");
+                            return false;
+                        }
+
                         for (Region region : Region.regions) {
-                            if (region.getOwner() == player.getUniqueId() && region.getName().toLowerCase().equals(name.toLowerCase())) {
+                            if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
                                 player.sendMessage(ChatColor.RED + "You already have a region named " + name);
                                 return false;
                             }
@@ -69,8 +76,13 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                         regionPlayer.setPos2(null);
                     }
                     case "whitelist" -> {
+                        if (!player.hasPermission("region.whitelist")) {
+                            player.sendMessage(ChatColor.RED + "You do not have permission to do this...");
+                            return false;
+                        }
+
                         for (Region region : Region.regions) {
-                            if (region.getOwner() == player.getUniqueId() && region.getName().toLowerCase().equals(name.toLowerCase())) {
+                            if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
                                 player.sendMessage(ChatColor.AQUA + name + " Whitelist:");
                                 if (region.getWhitelist().isEmpty()) {
                                     player.sendMessage("- Nobody");
@@ -91,8 +103,13 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                 String name = args[1];
 
                 if (args[0].equals("add")) {
+                    if (!player.hasPermission("region.add")) {
+                        player.sendMessage(ChatColor.RED + "You do not have permission to do this...");
+                        return false;
+                    }
+
                     for (Region region : Region.regions) {
-                        if (region.getOwner() == player.getUniqueId() && region.getName().toLowerCase().equals(name.toLowerCase())) {
+                        if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
                             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
                             if (offlinePlayer == null) {
                                 player.sendMessage(ChatColor.RED + "Could not find player...");
@@ -109,8 +126,13 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                     }
                     player.sendMessage(ChatColor.RED + "Could not find region named" + name);
                 } else if (args[0].equals("remove")) {
+                    if (!player.hasPermission("region.remove")) {
+                        player.sendMessage(ChatColor.RED + "You do not have permission to do this...");
+                        return false;
+                    }
+
                     for (Region region : Region.regions) {
-                        if (region.getOwner() == player.getUniqueId() && region.getName().toLowerCase().equals(name.toLowerCase())) {
+                        if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
                             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
                             if (offlinePlayer == null) {
                                 player.sendMessage(ChatColor.RED + "Could not find player...");
@@ -145,12 +167,21 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
         return completions;
     }
 
-    private void openMenu(Player player) {
+    private void openMenu(Player player, String findRegion) {
         if (!player.hasPermission("region.menu")) {
             player.sendMessage(ChatColor.RED + "You do not have permission to do this...");
             return;
         }
 
-        player.sendMessage("Open Menu");
+        Region region = null;
+        if (findRegion != null && !findRegion.isEmpty()) {
+            region = Region.getByName(player, findRegion);
+        }
+
+        if (region == null) {
+            new ViewRegionsMenu().openMenu(player);
+        } else {
+            new ManageRegionMenu(region).openMenu(player);
+        }
     }
 }

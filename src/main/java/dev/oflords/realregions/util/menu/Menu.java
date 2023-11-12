@@ -162,4 +162,8 @@ public abstract class Menu {
     public boolean isAutoUpdate() {
         return autoUpdate;
     }
+
+    public Button getPlaceholderButton() {
+        return placeholderButton;
+    }
 }

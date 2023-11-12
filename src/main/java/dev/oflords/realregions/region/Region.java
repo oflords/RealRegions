@@ -33,6 +33,20 @@ public class Region {
         return owner;
     }
 
+    public static Region getByName(Player player, String name) {
+        for (Region region : regions) {
+            if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
+                return region;
+            }
+        }
+
+        return null;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -47,5 +61,13 @@ public class Region {
 
     public Location getPos2() {
         return pos2;
+    }
+
+    public void setPos1(Location pos1) {
+        this.pos1 = pos1;
+    }
+
+    public void setPos2(Location pos2) {
+        this.pos2 = pos2;
     }
 }

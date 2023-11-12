@@ -1,6 +1,7 @@
 package dev.oflords.realregions.listeners;
 
-import dev.oflords.realregions.RegionPlayer;
+import dev.oflords.realregions.region.Region;
+import dev.oflords.realregions.region.RegionPlayer;
 import dev.oflords.realregions.util.RegionUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,16 +16,37 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class RegionPlayerListener implements Listener {
 
     @EventHandler
+    private void onRename(AsyncPlayerChatEvent event) {
+        RegionPlayer regionPlayer = RegionPlayer.getByUUID(event.getPlayer().getUniqueId());
+
+        if (regionPlayer.getRename() != null) {
+            event.setCancelled(true);
+            for (Region region : Region.regions) {
+                if (region.getOwner() == event.getPlayer().getUniqueId() && region.getName().equalsIgnoreCase(event.getMessage())) {
+                    event.getPlayer().sendMessage(ChatColor.RED + "You already have a region named " + event.getMessage());
+                    return;
+                }
+            }
+
+            regionPlayer.getRename().setName(event.getMessage());
+            regionPlayer.setRename(null);
+
+            event.getPlayer().sendMessage(ChatColor.GREEN + "Renamed Successfully!");
+        }
+    }
+
+    @EventHandler
     private void onWand(PlayerInteractEvent event) {
         if (event.hasItem() && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK)) {
             ItemStack wand = event.getItem();
-            if (wand.getType() == Material.GOLDEN_SHOVEL && wand.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Region Wand")) {
+            if (wand.getType() == Material.STICK && wand.getItemMeta() != null &&  wand.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Region Wand")) {
                 event.setCancelled(true);
                 RegionPlayer regionPlayer = RegionPlayer.getByUUID(event.getPlayer().getUniqueId());
                 if (regionPlayer == null) {
@@ -32,10 +54,20 @@ public class RegionPlayerListener implements Listener {
                 }
 
                 if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                    regionPlayer.setPos1(event.getClickedBlock().getLocation());
+                    if (regionPlayer.getRedefine() != null) {
+                        regionPlayer.getRedefine().setPos1(event.getClickedBlock().getLocation());
+                        regionPlayer.setRedefine(null);
+                    } else {
+                        regionPlayer.setPos1(event.getClickedBlock().getLocation());
+                    }
                     event.getPlayer().sendMessage(ChatColor.YELLOW + "Location 1 Set!");
-                } else {
-                    regionPlayer.setPos2(event.getClickedBlock().getLocation());
+                } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    if (regionPlayer.getRedefine() != null) {
+                        regionPlayer.getRedefine().setPos2(event.getClickedBlock().getLocation());
+                        regionPlayer.setRedefine(null);
+                    } else {
+                        regionPlayer.setPos2(event.getClickedBlock().getLocation());
+                    }
                     event.getPlayer().sendMessage(ChatColor.YELLOW + "Location 2 Set!");
                 }
             }
