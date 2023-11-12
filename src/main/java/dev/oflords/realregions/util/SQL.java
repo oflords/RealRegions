@@ -94,8 +94,6 @@ public class SQL {
                 save = "UPDATE regions SET (Name = '" + region.getName() + "', Owner = '" + region.getOwner().toString() + "', Pos1 = '" + region.getPos1().toString() + "', Pos2 = '" + region.getPos2().toString() + "') WHERE ID = " + region.getId() + ";";
             }
 
-            RealRegions.get().sql.getConnection().
-
             for (UUID uuid : region.getWhitelist()) {
                 String saveWhitelist = "INSERT INTO regions_whitelist (RegionID, User) VALUES (1, '" + uuid.toString() + "')";
             }
