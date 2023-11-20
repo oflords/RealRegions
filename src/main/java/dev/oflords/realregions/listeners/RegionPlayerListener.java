@@ -30,7 +30,7 @@ public class RegionPlayerListener implements Listener {
         if (regionPlayer.getRename() != null) {
             event.setCancelled(true);
             for (Region region : Region.regions) {
-                if (region.getOwner() == event.getPlayer().getUniqueId() && region.getName().equalsIgnoreCase(event.getMessage())) {
+                if (region.getOwner().equals(event.getPlayer().getUniqueId()) && region.getName().equalsIgnoreCase(event.getMessage())) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You already have a region named " + event.getMessage());
                     return;
                 }

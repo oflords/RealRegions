@@ -22,6 +22,7 @@ public class Region {
     private Location pos2;
 
     public Region(String name, UUID owner, Location pos1, Location pos2) {
+        this.id = 0;
         this.name = name;
         this.owner = owner;
         this.pos1 = pos1;
@@ -39,7 +40,7 @@ public class Region {
 
     public static Region getByName(Player player, String name) {
         for (Region region : regions) {
-            if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
+            if (region.getOwner().equals(player.getUniqueId()) && region.getName().equalsIgnoreCase(name)) {
                 return region;
             }
         }

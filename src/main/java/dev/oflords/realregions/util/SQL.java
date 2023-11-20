@@ -90,33 +90,71 @@ public class SQL {
     public void save() {
         for (Region region : Region.regions) {
             String save;
+            int regionId = 0;
             if (region.getId() > 0) {
-                save = "INSERT INTO regions (Name, Owner, Pos1, Pos2) VALUES ('" + region.getName() + "', '" + region.getOwner().toString() + "', '" + LocationUtil.serialize(region.getPos1()) + "', '" + LocationUtil.serialize(region.getPos2()) + "');";
+                regionId = region.getId();
+                save = "UPDATE realregions_regions SET (Name = '" + region.getName() + "', Owner = '" + region.getOwner().toString() + "', Pos1 = '" + LocationUtil.serialize(region.getPos1()) + "', Pos2 = '" + LocationUtil.serialize(region.getPos2()) + "') WHERE ID = " + regionId + ";";
             } else {
-                save = "UPDATE regions SET (Name = '" + region.getName() + "', Owner = '" + region.getOwner().toString() + "', Pos1 = '" + LocationUtil.serialize(region.getPos1()) + "', Pos2 = '" + LocationUtil.serialize(region.getPos2()) + "') WHERE ID = " + region.getId() + ";";
+                save = "INSERT INTO realregions_regions (Name, Owner, Pos1, Pos2, Active) VALUES ('" + region.getName() + "', '" + region.getOwner().toString() + "', '" + LocationUtil.serialize(region.getPos1()) + "', '" + LocationUtil.serialize(region.getPos2()) + "', 1);";
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement(save)) {
+                statement.execute();
+            } catch (SQLException e) {
+                RealRegions.get().getLogger().info("[Database] Error 3: " + e.getMessage());
+            }
+
+            try (PreparedStatement statement = connection.prepareStatement("SELECT Id FROM realregions_regions WHERE Name = '" + region.getName() + "' AND Owner = '" + region.getOwner().toString() + "'")) {
+                ResultSet resultSet = statement.executeQuery();
+                resultSet.first();
+                regionId = resultSet.getInt("Id");
+            } catch (SQLException e) {
+                RealRegions.get().getLogger().info("[Database] Error 4: " + e.getMessage());
             }
 
             for (UUID uuid : region.getWhitelist()) {
-                String saveWhitelist = "INSERT INTO regions_whitelist (RegionID, User) VALUES (1, '" + uuid.toString() + "')";
+                String saveWhitelist = "INSERT INTO realregions_whitelists (RegionID, User) VALUES (" + regionId + ", '" + uuid.toString() + "')";
+
+                try (PreparedStatement statement = connection.prepareStatement(saveWhitelist)) {
+                    statement.execute();
+                } catch (SQLException e) {
+                    RealRegions.get().getLogger().info("[Database] Error 5: " + e.getMessage());
+                }
             }
         }
     }
 
     public void load() {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM regions WHERE Active = 1")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM realregions_regions WHERE Active = 1")) {
             ResultSet data = statement.executeQuery();
 
-            if (data.next()) {
-                // new region
+            while (data.next()) {
+                RealRegions.get().getLogger().info("[Database] Loading region: " + data.getString("Name"));
+                Region region = new Region(data.getString("Name"),
+                        UUID.fromString(data.getString("Owner")),
+                        LocationUtil.deserialize(data.getString("Pos1")),
+                        LocationUtil.deserialize(data.getString("Pos2")));
+                region.setId(data.getInt("ID"));
 
-                // for each result
-                // new region
-                String whitelist = "SELECT * FROM regions_whitelist WHERE RegionID = 1 AND Active = 1";
-                // for each result
-                // region.getWhitelist().add(result);
+                String whitelist = "SELECT * FROM realregions_whitelists WHERE RegionID = " + data.getInt("ID") + " AND Active = 1";
+
+                try (PreparedStatement whitelistStatement = connection.prepareStatement(whitelist)) {
+                    ResultSet whitelistData = whitelistStatement.executeQuery();
+
+                    while (whitelistData.next()) {
+                        UUID whitelistUser = UUID.fromString(whitelistData.getString("User"));
+                        if (!region.getWhitelist().contains(whitelistUser)) {
+                            region.getWhitelist().add(whitelistUser);
+                        }
+                    }
+                } catch (SQLException e) {
+                    RealRegions.get().getLogger().info("[Database] Error 6: " + e.getMessage());
+                }
             }
         } catch (SQLException e) {
-
+            RealRegions.get().getLogger().info("[Database] Error 7: " + e.getMessage());
         }
+
+        RealRegions.get().getLogger().info("[Database] Loaded " + Region.regions.size() + " regions!");
     }
 }

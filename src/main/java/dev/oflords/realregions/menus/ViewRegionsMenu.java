@@ -26,7 +26,7 @@ public class ViewRegionsMenu extends PaginatedMenu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         for (Region region : Region.regions) {
-            if (region.getOwner() == player.getUniqueId()) {
+            if (region.getOwner().equals(player.getUniqueId())) {
                 buttons.put(buttons.size(), new RegionButton(region));
             }
         }

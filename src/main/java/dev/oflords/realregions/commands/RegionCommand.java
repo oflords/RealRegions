@@ -58,7 +58,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                         }
 
                         for (Region region : Region.regions) {
-                            if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
+                            if (region.getOwner().equals(player.getUniqueId()) && region.getName().equalsIgnoreCase(name)) {
                                 player.sendMessage(ChatColor.RED + "You already have a region named " + name);
                                 return false;
                             }
@@ -87,7 +87,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                         }
 
                         for (Region region : Region.regions) {
-                            if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
+                            if (region.getOwner().equals(player.getUniqueId()) && region.getName().equalsIgnoreCase(name)) {
                                 player.sendMessage(ChatColor.AQUA + name + " Whitelist:");
                                 if (region.getWhitelist().isEmpty()) {
                                     player.sendMessage("- Nobody");
@@ -114,7 +114,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                     }
 
                     for (Region region : Region.regions) {
-                        if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
+                        if (region.getOwner().equals(player.getUniqueId()) && region.getName().equalsIgnoreCase(name)) {
                             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
                             if (offlinePlayer == null) {
                                 player.sendMessage(ChatColor.RED + "Could not find player...");
@@ -137,7 +137,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                     }
 
                     for (Region region : Region.regions) {
-                        if (region.getOwner() == player.getUniqueId() && region.getName().equalsIgnoreCase(name)) {
+                        if (region.getOwner().equals(player.getUniqueId()) && region.getName().equalsIgnoreCase(name)) {
                             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
                             if (offlinePlayer == null) {
                                 player.sendMessage(ChatColor.RED + "Could not find player...");
