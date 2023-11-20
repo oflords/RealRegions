@@ -30,24 +30,12 @@ public class SQL {
             this.password = configCursor.getString("password");
 
             this.openConnection();
-            // if (this.loaded) this.createTable();
+            this.createTable();
         }
     }
 
-    // Main Table Structure:
-    // ID - int (auto increment, primary key)
-    // Name - varchar(100)
-    // Owner - UUID
-    // Whitelist - ID of second table
-    // Pos1 - varchar(50)
-    // Pos2 - varchar(50)
-    // Active - bool (default true)
-
-    // Whitelist Table Structure:
-    // ID - int (auto increment, primary key)
-    // RegionID - int
-    // User - UUID
-    // Active - bool
+    // realregions_regions
+    // realregions_whitelists
 
     private void openConnection() {
         try {
@@ -82,6 +70,20 @@ public class SQL {
             if (this.connection != null && !connection.isClosed()) this.connection.close();
         } catch (SQLException ex) {
 //            ex.printStackTrace();
+        }
+    }
+
+    public void createTable() {
+        try (PreparedStatement statement = connection.prepareStatement("CREATE TABLE `realregions_regions` (`ID` INT(20) AUTO_INCREMENT,`Name` VARCHAR(100),`Owner` VARCHAR(40),`Pos1` VARCHAR(100),`Pos2` VARCHAR(100),`Active` BOOLEAN,PRIMARY KEY (`ID`));")) {
+            statement.execute();
+        } catch (SQLException e) {
+            RealRegions.get().getLogger().info("[Database] Error 1: " + e.getMessage());
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement("CREATE TABLE `realregions_whitelists` (`ID` INT(20) AUTO_INCREMENT,`RegionId` INT(20),`User` VARCHAR(40),`Active` BOOLEAN,PRIMARY KEY (`ID`));")) {
+            statement.execute();
+        } catch (SQLException e) {
+            RealRegions.get().getLogger().info("[Database] Error 2: " + e.getMessage());
         }
     }
 
