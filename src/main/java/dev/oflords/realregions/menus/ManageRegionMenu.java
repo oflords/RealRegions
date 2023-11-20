@@ -2,6 +2,7 @@ package dev.oflords.realregions.menus;
 
 import dev.oflords.realregions.region.Region;
 import dev.oflords.realregions.region.RegionPlayer;
+import dev.oflords.realregions.util.ItemBuilder;
 import dev.oflords.realregions.util.menu.Button;
 import dev.oflords.realregions.util.menu.Menu;
 import org.bukkit.ChatColor;
@@ -56,7 +57,7 @@ public class ManageRegionMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemStack(Material.WRITABLE_BOOK);
+            return new ItemBuilder(Material.WRITABLE_BOOK).name("&aRename").build();
         }
 
         @Override
@@ -77,7 +78,7 @@ public class ManageRegionMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemStack(Material.RED_BANNER);
+            return new ItemBuilder(Material.RED_BANNER).name("&cRemove Whitelisted Player").build();
         }
 
         @Override
@@ -96,7 +97,7 @@ public class ManageRegionMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemStack(Material.GREEN_BANNER);
+            return new ItemBuilder(Material.GREEN_BANNER).name("&aAdd Whitelisted Player").build();
         }
 
         @Override
@@ -115,16 +116,13 @@ public class ManageRegionMenu extends Menu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            return new ItemStack(Material.STICK);
+            return new ItemBuilder(Material.STICK).name("&eRedefine Region").build();
         }
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            ItemStack wand = new ItemStack(Material.STICK);
-            ItemMeta wandMeta = wand.getItemMeta();
-            wandMeta.setDisplayName(ChatColor.YELLOW + "Region Wand");
-            wand.setItemMeta(wandMeta);
-            player.getInventory().addItem(wand);
+            ItemBuilder wand = new ItemBuilder(Material.STICK).name("&eRegion Wand");
+            player.getInventory().addItem(wand.build());
             player.sendMessage(ChatColor.GREEN + "You have been given a Region Wand to redefine your region!");
 
             RegionPlayer regionPlayer = RegionPlayer.getByUUID(player.getUniqueId());

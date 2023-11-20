@@ -1,6 +1,7 @@
 package dev.oflords.realregions.menus;
 
 import dev.oflords.realregions.region.Region;
+import dev.oflords.realregions.util.ItemBuilder;
 import dev.oflords.realregions.util.menu.Button;
 import dev.oflords.realregions.util.menu.pagination.PaginatedMenu;
 import org.bukkit.Material;
@@ -43,13 +44,7 @@ public class ViewRegionsMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            List<String> lore = new ArrayList<>();
-
-            lore.add("&fName: &b" + region.getName());
-            lore.add("");
-            lore.add("&7Click to manage this Region");
-
-            return new ItemStack(Material.GREEN_WOOL);
+            return new ItemBuilder(Material.GREEN_WOOL).name("&fName: &b" + region.getName()).lore("&7Click to manage this Region").build();
         }
 
         @Override

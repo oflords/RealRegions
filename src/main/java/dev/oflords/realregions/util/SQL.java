@@ -89,9 +89,9 @@ public class SQL {
         for (Region region : Region.regions) {
             String save;
             if (region.getId() > 0) {
-                save = "INSERT INTO regions (Name, Owner, Pos1, Pos2) VALUES ('" + region.getName() + "', '" + region.getOwner().toString() + "', '" + region.getPos1().toString() + "', '" + region.getPos2().toString() + "');";
+                save = "INSERT INTO regions (Name, Owner, Pos1, Pos2) VALUES ('" + region.getName() + "', '" + region.getOwner().toString() + "', '" + LocationUtil.serialize(region.getPos1()) + "', '" + LocationUtil.serialize(region.getPos2()) + "');";
             } else {
-                save = "UPDATE regions SET (Name = '" + region.getName() + "', Owner = '" + region.getOwner().toString() + "', Pos1 = '" + region.getPos1().toString() + "', Pos2 = '" + region.getPos2().toString() + "') WHERE ID = " + region.getId() + ";";
+                save = "UPDATE regions SET (Name = '" + region.getName() + "', Owner = '" + region.getOwner().toString() + "', Pos1 = '" + LocationUtil.serialize(region.getPos1()) + "', Pos2 = '" + LocationUtil.serialize(region.getPos2()) + "') WHERE ID = " + region.getId() + ";";
             }
 
             for (UUID uuid : region.getWhitelist()) {

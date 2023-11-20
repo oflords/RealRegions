@@ -1,5 +1,6 @@
 package dev.oflords.realregions.util.menu.pagination;
 
+import dev.oflords.realregions.util.ItemBuilder;
 import dev.oflords.realregions.util.menu.Button;
 import dev.oflords.realregions.util.menu.Menu;
 import org.bukkit.ChatColor;
@@ -20,7 +21,7 @@ public class BackButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        return new ItemStack(Material.REDSTONE);
+        return new ItemBuilder(Material.REDSTONE).name("&cBack").build();
     }
 
     @Override

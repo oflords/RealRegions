@@ -1,11 +1,13 @@
 package dev.oflords.realregions.menus;
 
 import dev.oflords.realregions.region.Region;
+import dev.oflords.realregions.util.ItemBuilder;
 import dev.oflords.realregions.util.menu.Button;
 import dev.oflords.realregions.util.menu.pagination.PaginatedMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -51,11 +53,12 @@ public class RegionAddMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            List<String> lore = new ArrayList<>();
+            ItemBuilder itemBuilder = new ItemBuilder(Material.PLAYER_HEAD);
 
-            lore.add("&fName: &b" + addPlayer.getName());
+            itemBuilder.name("&b" + addPlayer.getName());
+            itemBuilder.setSkullOwner(addPlayer);
 
-            return new ItemStack(Material.PLAYER_HEAD);
+            return itemBuilder.build();
         }
 
         @Override

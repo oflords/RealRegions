@@ -1,5 +1,6 @@
 package dev.oflords.realregions.util.menu;
 
+import dev.oflords.realregions.util.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,13 +13,10 @@ public abstract class Button {
     public static Button placeholder(final Material material, String title) {
         return (new Button() {
             public ItemStack getButtonItem(Player player) {
-                ItemStack it = new ItemStack(material, 1);
-                ItemMeta meta = it.getItemMeta();
+                ItemBuilder itemBuilder = new ItemBuilder(material);
+                itemBuilder.name(title);
 
-                meta.setDisplayName(title);
-                it.setItemMeta(meta);
-
-                return it;
+                return itemBuilder.build();
             }
         });
     }

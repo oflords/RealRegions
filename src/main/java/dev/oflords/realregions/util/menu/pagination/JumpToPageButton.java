@@ -2,6 +2,7 @@ package dev.oflords.realregions.util.menu.pagination;
 
 import java.util.Arrays;
 
+import dev.oflords.realregions.util.ItemBuilder;
 import dev.oflords.realregions.util.menu.Button;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,21 +25,19 @@ public class JumpToPageButton extends Button {
 
     @Override
     public ItemStack getButtonItem(Player player) {
-        ItemStack itemStack = new ItemStack(this.current ? Material.ENCHANTED_BOOK : Material.BOOK, this.page);
-        ItemMeta itemMeta = itemStack.getItemMeta();
+        ItemBuilder itemBuilder = new ItemBuilder(this.current ? Material.ENCHANTED_BOOK : Material.BOOK);
+        itemBuilder.amount(this.page);
 
-        itemMeta.setDisplayName(ChatColor.AQUA + "Page " + this.page);
+        itemBuilder.name(ChatColor.AQUA + "Page " + this.page);
 
         if (this.current) {
-            itemMeta.setLore(Arrays.asList(
+            itemBuilder.lore(Arrays.asList(
                     "",
                     ChatColor.GREEN + "Current page"
             ));
         }
 
-        itemStack.setItemMeta(itemMeta);
-
-        return itemStack;
+        return itemBuilder.build();
     }
 
     @Override

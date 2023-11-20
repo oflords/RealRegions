@@ -1,6 +1,7 @@
 package dev.oflords.realregions.menus;
 
 import dev.oflords.realregions.region.Region;
+import dev.oflords.realregions.util.ItemBuilder;
 import dev.oflords.realregions.util.menu.Button;
 import dev.oflords.realregions.util.menu.pagination.PaginatedMenu;
 import org.bukkit.Bukkit;
@@ -49,13 +50,13 @@ public class RegionRemoveMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            List<String> lore = new ArrayList<>();
-
+            ItemBuilder itemBuilder = new ItemBuilder(Material.PLAYER_HEAD);
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(removePlayer);
 
-            lore.add("&fName: &b" + offlinePlayer.getName());
+            itemBuilder.name("&b" + offlinePlayer.getName());
+            itemBuilder.setSkullOwner(offlinePlayer);
 
-            return new ItemStack(Material.PLAYER_HEAD);
+            return itemBuilder.build();
         }
 
         @Override
