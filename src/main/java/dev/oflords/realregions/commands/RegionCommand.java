@@ -5,6 +5,7 @@ import dev.oflords.realregions.menus.ManageRegionMenu;
 import dev.oflords.realregions.menus.ViewRegionsMenu;
 import dev.oflords.realregions.region.Region;
 import dev.oflords.realregions.util.ItemBuilder;
+import dev.oflords.realregions.util.RegionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -33,7 +34,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
             } else if (args.length == 1) {
                 switch (args[0]) {
                     case "wand" -> {
-                        ItemBuilder wand = new ItemBuilder(Material.STICK).name("&eRegion Wand");
+                        ItemBuilder wand = new ItemBuilder(Material.STICK).name(ChatColor.YELLOW + "Region Wand");
                         player.getInventory().addItem(wand.build());
                         sender.sendMessage(ChatColor.GREEN + "You have been given a Region Wand!");
                     }
@@ -67,6 +68,12 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                             player.sendMessage(ChatColor.RED + "You must use /region wand and set two locations before creating a region!");
                             return false;
                         }
+
+                        if (RegionUtil.inOtherRegion(player, regionPlayer.getPos1()) || RegionUtil.inOtherRegion(player, regionPlayer.getPos2())) {
+                            player.sendMessage(ChatColor.RED + "You cannot make a region within another region...");
+                            return false;
+                        }
+
                         new Region(name, player.getUniqueId(), regionPlayer.getPos1(), regionPlayer.getPos2());
                         player.sendMessage(ChatColor.GREEN + "Created new region " + name + "!");
 

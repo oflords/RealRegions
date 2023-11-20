@@ -29,6 +29,8 @@ public class Region {
 
         this.whitelist = new ArrayList<>();
         this.whitelist.add(owner);
+
+        regions.add(this);
     }
 
     public UUID getOwner() {

@@ -5,9 +5,19 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class RegionUtil {
+
+    public static boolean inOtherRegion(Player player, Location location) {
+        for (Region region : Region.regions) {
+            if (isLocationWithinBounds(location, region.getPos1(), region.getPos2())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     public static boolean inRegionNotAllowed(Player player, Location location) {
         if (player.hasPermission("region.bypass")) {
-            return true;
+            return false;
         }
 
         for (Region region : Region.regions) {

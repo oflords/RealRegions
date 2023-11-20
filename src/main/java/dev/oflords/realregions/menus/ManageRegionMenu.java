@@ -3,6 +3,7 @@ package dev.oflords.realregions.menus;
 import dev.oflords.realregions.region.Region;
 import dev.oflords.realregions.region.RegionPlayer;
 import dev.oflords.realregions.util.ItemBuilder;
+import dev.oflords.realregions.util.RegionUtil;
 import dev.oflords.realregions.util.menu.Button;
 import dev.oflords.realregions.util.menu.Menu;
 import org.bukkit.ChatColor;
@@ -121,12 +122,25 @@ public class ManageRegionMenu extends Menu {
 
         @Override
         public void clicked(Player player, ClickType clickType) {
-            ItemBuilder wand = new ItemBuilder(Material.STICK).name("&eRegion Wand");
-            player.getInventory().addItem(wand.build());
-            player.sendMessage(ChatColor.GREEN + "You have been given a Region Wand to redefine your region!");
-
             RegionPlayer regionPlayer = RegionPlayer.getByUUID(player.getUniqueId());
-            regionPlayer.setRedefine(this.region);
+
+            if (regionPlayer.getPos1() != null && regionPlayer.getPos2() != null) {
+                if (RegionUtil.inOtherRegion(player, regionPlayer.getPos1()) || RegionUtil.inOtherRegion(player, regionPlayer.getPos2())) {
+                    player.sendMessage(ChatColor.RED + "You cannot make a region within another region...");
+                    return;
+                }
+
+                this.region.setPos1(regionPlayer.getPos1());
+                this.region.setPos2(regionPlayer.getPos2());
+
+                player.sendMessage(ChatColor.GREEN + "Redefined region " + this.region.getName());
+            } else {
+                ItemBuilder wand = new ItemBuilder(Material.STICK).name(ChatColor.YELLOW + "Region Wand");
+                player.getInventory().addItem(wand.build());
+                player.sendMessage(ChatColor.GREEN + "You have been given a Region Wand to redefine your region!");
+
+                regionPlayer.setRedefine(this.region);
+            }
         }
     }
 

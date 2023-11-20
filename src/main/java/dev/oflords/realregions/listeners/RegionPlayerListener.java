@@ -4,6 +4,7 @@ import dev.oflords.realregions.region.Region;
 import dev.oflords.realregions.region.RegionPlayer;
 import dev.oflords.realregions.util.RegionUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,7 +47,7 @@ public class RegionPlayerListener implements Listener {
     private void onWand(PlayerInteractEvent event) {
         if (event.hasItem() && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK)) {
             ItemStack wand = event.getItem();
-            if (wand.getType() == Material.STICK && wand.getItemMeta() != null &&  wand.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Region Wand")) {
+            if (wand.getType() == Material.STICK && wand.getItemMeta() != null && wand.getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "Region Wand")) {
                 event.setCancelled(true);
                 RegionPlayer regionPlayer = RegionPlayer.getByUUID(event.getPlayer().getUniqueId());
                 if (regionPlayer == null) {
@@ -54,20 +55,14 @@ public class RegionPlayerListener implements Listener {
                 }
 
                 if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                    if (regionPlayer.getRedefine() != null) {
-                        regionPlayer.getRedefine().setPos1(event.getClickedBlock().getLocation());
-                        regionPlayer.setRedefine(null);
-                    } else {
-                        regionPlayer.setPos1(event.getClickedBlock().getLocation());
-                    }
+                    Location position = event.getClickedBlock().getLocation();
+                    position.setY(-100);
+                    regionPlayer.setPos1(position);
                     event.getPlayer().sendMessage(ChatColor.YELLOW + "Location 1 Set!");
                 } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                    if (regionPlayer.getRedefine() != null) {
-                        regionPlayer.getRedefine().setPos2(event.getClickedBlock().getLocation());
-                        regionPlayer.setRedefine(null);
-                    } else {
-                        regionPlayer.setPos2(event.getClickedBlock().getLocation());
-                    }
+                    Location position = event.getClickedBlock().getLocation();
+                    position.setY(300);
+                    regionPlayer.setPos2(position);
                     event.getPlayer().sendMessage(ChatColor.YELLOW + "Location 2 Set!");
                 }
             }
