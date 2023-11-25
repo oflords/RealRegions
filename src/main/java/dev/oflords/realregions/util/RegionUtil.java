@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public class RegionUtil {
 
-    public static boolean inOtherRegion(Player player, Location location) {
+    public static boolean inOtherRegion(Location location) {
         for (Region region : Region.regions) {
             if (isLocationWithinBounds(location, region.getPos1(), region.getPos2())) {
                 return true;

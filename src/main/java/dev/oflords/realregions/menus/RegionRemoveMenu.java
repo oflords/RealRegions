@@ -38,7 +38,7 @@ public class RegionRemoveMenu extends PaginatedMenu {
         return buttons;
     }
 
-    public static class RemovePlayerButton extends Button {
+    public class RemovePlayerButton extends Button {
 
         public RemovePlayerButton(UUID player, Region region) {
             this.removePlayer = player;

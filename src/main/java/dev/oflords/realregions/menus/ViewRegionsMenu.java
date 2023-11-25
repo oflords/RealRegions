@@ -34,7 +34,7 @@ public class ViewRegionsMenu extends PaginatedMenu {
         return buttons;
     }
 
-    public static class RegionButton extends Button {
+    public class RegionButton extends Button {
 
         public RegionButton(Region region) {
             this.region = region;

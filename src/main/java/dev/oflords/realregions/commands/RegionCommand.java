@@ -69,7 +69,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                             return false;
                         }
 
-                        if (RegionUtil.inOtherRegion(player, regionPlayer.getPos1()) || RegionUtil.inOtherRegion(player, regionPlayer.getPos2())) {
+                        if (RegionUtil.inOtherRegion(regionPlayer.getPos1()) || RegionUtil.inOtherRegion(regionPlayer.getPos2())) {
                             player.sendMessage(ChatColor.RED + "You cannot make a region within another region...");
                             return false;
                         }

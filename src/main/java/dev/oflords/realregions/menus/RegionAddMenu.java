@@ -41,7 +41,7 @@ public class RegionAddMenu extends PaginatedMenu {
         return buttons;
     }
 
-    public static class AddPlayerButton extends Button {
+    public class AddPlayerButton extends Button {
 
         public AddPlayerButton(Player player, Region region) {
             this.addPlayer = player;

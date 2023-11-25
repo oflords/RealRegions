@@ -48,7 +48,7 @@ public class ManageRegionMenu extends Menu {
         return buttons;
     }
 
-    public static class RenameButton extends Button {
+    public class RenameButton extends Button {
 
         private Region region;
 
@@ -69,7 +69,7 @@ public class ManageRegionMenu extends Menu {
         }
     }
 
-    public static class RemoveRegionButton extends Button {
+    public class RemoveRegionButton extends Button {
 
         private Region region;
 
@@ -88,7 +88,7 @@ public class ManageRegionMenu extends Menu {
         }
     }
 
-    public static class AddRegionButton extends Button {
+    public class AddRegionButton extends Button {
 
         private Region region;
 
@@ -107,7 +107,7 @@ public class ManageRegionMenu extends Menu {
         }
     }
 
-    public static class RedefineButton extends Button {
+    public class RedefineButton extends Button {
 
         private Region region;
 
@@ -125,7 +125,7 @@ public class ManageRegionMenu extends Menu {
             RegionPlayer regionPlayer = RegionPlayer.getByUUID(player.getUniqueId());
 
             if (regionPlayer.getPos1() != null && regionPlayer.getPos2() != null) {
-                if (RegionUtil.inOtherRegion(player, regionPlayer.getPos1()) || RegionUtil.inOtherRegion(player, regionPlayer.getPos2())) {
+                if (RegionUtil.inOtherRegion(regionPlayer.getPos1()) || RegionUtil.inOtherRegion(regionPlayer.getPos2())) {
                     player.sendMessage(ChatColor.RED + "You cannot make a region within another region...");
                     return;
                 }
