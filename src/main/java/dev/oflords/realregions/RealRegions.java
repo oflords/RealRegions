@@ -7,16 +7,14 @@ import dev.oflords.realregions.util.menu.MenuListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class RealRegions extends JavaPlugin {
-    public static RealRegions realRegions;
-    public SQL sql;
+    private SQL sql;
     @Override
     public void onEnable() {
         saveConfig();
 
-        realRegions = this;
         this.getCommand("region").setExecutor(new RegionCommand());
 
-        this.sql = new SQL(getConfig());
+        this.sql = new SQL(getConfig(), this);
         this.sql.load();
 
         getServer().getPluginManager().registerEvents(new RegionPlayerListener(), this);
@@ -26,9 +24,5 @@ public class RealRegions extends JavaPlugin {
     @Override
     public void onDisable() {
         this.sql.save();
-    }
-
-    public static RealRegions get() {
-        return realRegions;
     }
 }

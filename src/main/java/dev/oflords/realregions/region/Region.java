@@ -39,13 +39,10 @@ public class Region {
     }
 
     public static Region getByName(Player player, String name) {
-        for (Region region : regions) {
-            if (region.getOwner().equals(player.getUniqueId()) && region.getName().equalsIgnoreCase(name)) {
-                return region;
-            }
-        }
-
-        return null;
+        return regions.stream()
+                .filter(region -> region.getOwner().equals(player.getUniqueId()) && region.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public void setName(String name) {

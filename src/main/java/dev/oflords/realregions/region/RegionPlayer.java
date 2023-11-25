@@ -33,7 +33,7 @@ public class RegionPlayer {
     }
 
     public static void removeProfile(UUID uuid) {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(RealRegions.get(), () -> {
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(RealRegions.getProvidingPlugin(RealRegions.class), () -> {
             profiles.remove(uuid);
         });
     }

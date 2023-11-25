@@ -147,7 +147,7 @@ public class RegionCommand implements CommandExecutor, TabCompleter {
                                 player.sendMessage(ChatColor.RED + "Player has not been added...");
                                 return false;
                             }
-                            region.getWhitelist().add(offlinePlayer.getUniqueId());
+                            region.getWhitelist().remove(offlinePlayer.getUniqueId());
                             player.sendMessage(ChatColor.GREEN + "Removed " + offlinePlayer.getName() + " from your region whitelist!");
                             return false;
                         }

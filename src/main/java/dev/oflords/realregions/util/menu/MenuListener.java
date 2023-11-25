@@ -66,7 +66,7 @@ public class MenuListener implements Listener {
                 }
 
                 if (event.isCancelled()) {
-                    Bukkit.getScheduler().runTaskLater(RealRegions.get(), player::updateInventory, 1L);
+                    Bukkit.getScheduler().runTaskLater(RealRegions.getProvidingPlugin(RealRegions.class), player::updateInventory, 1L);
                 }
             } else {
                 if (event.getCurrentItem() != null) {
